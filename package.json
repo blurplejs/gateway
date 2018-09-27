@@ -1,0 +1,8 @@
+{
+  "name": "@blurple/tests",
+  "version": "0.0.1",
+  "description": "For more information read [the documentation](https://blurple.js.org/extensions/testing.html).",
+  "main": "index.js",
+  "author": "Christopher Mühl <christopher@padarom.io>",
+  "license": "MIT"
+}
