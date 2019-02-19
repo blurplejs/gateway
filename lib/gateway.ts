@@ -3,10 +3,10 @@ import { createServer, Server } from 'http'
 // @ts-ignore
 import { Constants } from 'discord.js'
 import { parse } from 'querystring'
-import { isWebsocketError } from './errors'
-import { GatewayCloseEventCode, GatewayOpcode } from './constants'
+import { GatewayCloseEventCode } from './constants'
 import ClientResponder from './communication/ClientResponder'
-import { Encoding } from './communication/MessageEncoder';
+import { Encoding } from './communication/MessageEncoder'
+import Storage from './storage'
 
 export default class Gateway {
 
@@ -16,6 +16,8 @@ export default class Gateway {
     sockets = {} as { [key: string]: WebSocket }
 
     start (wsPort: number | undefined = 5085, httpPort: number | undefined = 5056) : void {
+        let storage = new Storage()
+
         this.wss = new WebSocket.Server({ port: wsPort })
         this.wss.on('connection', (socket, req) => {
             let attributes = parse((req.url as string).replace(/^\/?\??/, ''))
