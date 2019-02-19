@@ -1,8 +1,8 @@
 import { Constants } from 'discord.js'
 import express from 'express'
-import WebSocket from 'ws'
+import WebSocket from './websocket'
 
-export default class FakeDiscordServer {
+export default class {
 
     constructor (apiPort = 5080, wsPort = 5081) {
         this.apiPort = apiPort
@@ -28,12 +28,8 @@ export default class FakeDiscordServer {
     }
 
     _ws () {
-        let wss = new WebSocket.Server({ port: this.wsPort })
-        wss.on('connection', (ws) => {
-            ws.on('message', (message) => {
-                console.log(message)
-            })
-        })
+        let ws = new WebSocket()
+        ws.listen(this.wsPort)
     }
 
     async start () {

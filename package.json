@@ -1,5 +1,5 @@
 {
-  "name": "@blurple/tests",
+  "name": "@blurple/testing",
   "version": "0.0.1",
   "description": "For more information read [the documentation](https://blurple.js.org/extensions/testing.html).",
   "main": "dist/index.js",

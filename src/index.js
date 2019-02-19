@@ -1,1 +1,1 @@
-export { default as FakeDiscordServer } from './FakeDiscordServer'
+export { default as FakeDiscordAPI } from './api'
