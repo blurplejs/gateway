@@ -1,7 +1,9 @@
 # blurple.js testing utilities
 For more information read [the documentation](https://blurple.js.org/extensions/testing.html).
 
-### discord.js Support
-| Discord.js Version | API version | Supported Branch |
-| ------------------ | ----------- | ---------------- |
-| [11.4.2](https://github.com/discordjs/discord.js/tree/11.4.2) | v7 (WS v6) | master |
+Discord Bots are usually built around the Discord Gateway which provides live updates via WebSockets. If we were to connect a Discord Gateway Client to a different WebSocket-Server that provided the same API with the same kind of responses we could have these clients unit-testable. This is exactly what these test utilities provide: A dummy implementation of the Discord Gateway that's programmatically controllable to have events triggered when you need them.
+
+Keep in mind that this is used for integration testing, which - although it is all run locally - still uses network connections and is therefore generally slower than your regular unit tests.
+
+### Discord version
+We aim to implement the Gateway API version 6, so in theory any client working on that API should work. The tool was built with discord.js in mind however, so our primary focus lies on fully supporting that.

@@ -6,8 +6,9 @@ describe('Bot Authentication', () => {
     it ('should successfully authenticate a bot with a valid token', () => {
         let client = new Client()
 
-        let token = 'abcdef'
+        client.on('debug', console.log)
 
+        let token = 'abcdef'
         expect(client.login(token)).to.eventually.equal(token)
     })
 
