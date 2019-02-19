@@ -2,7 +2,25 @@
   "name": "@blurple/tests",
   "version": "0.0.1",
   "description": "For more information read [the documentation](https://blurple.js.org/extensions/testing.html).",
-  "main": "index.js",
+  "main": "dist/index.js",
   "author": "Christopher Mühl <christopher@padarom.io>",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "build": "babel src -d dist",
+    "watch": "babel src -d dist --watch",
+    "test": "mocha --require @babel/register test/**/*.js"
+  },
+  "dependencies": {
+    "discord.js": "^11.4.2",
+    "sinon": "^7.2.4"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.3.3",
+    "@babel/polyfill": "^7.2.5",
+    "@babel/preset-env": "^7.3.1",
+    "@babel/register": "^7.0.0",
+    "chai": "^4.2.0",
+    "mocha": "^6.0.0"
+  }
 }
