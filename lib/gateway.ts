@@ -2,11 +2,11 @@ import * as WebSocket from 'ws'
 import { createServer, Server } from 'http'
 // @ts-ignore
 import { Constants } from 'discord.js'
-import MessagePacker from './communication/MessagePacker'
-import Message from './communication/Message'
 import { parse } from 'querystring'
 import { isWebsocketError } from './errors'
 import { GatewayCloseEventCode, GatewayOpcode } from './constants'
+import ClientResponder from './communication/ClientResponder'
+import { Encoding } from './communication/MessageEncoder';
 
 export default class Gateway {
 
@@ -20,45 +20,12 @@ export default class Gateway {
         this.wss.on('connection', (socket, req) => {
             let attributes = parse((req.url as string).replace(/^\/?\??/, ''))
 
-            let encoding = attributes.encoding || 'json'
-            let packer = new MessagePacker(encoding == 'etf')
-
-            // Send Hello package
-            let message = new Message(GatewayOpcode.Hello, {
-                heartbeat_interval: 45000,
-                _trace: ['discord-fake-gateway-01']
-            })
-            socket.send(packer.pack(message))
-
-            socket.on('message', (buffer) => {
-                try {
-                    let content = packer.unpack(buffer)
-                    let message = Message.fromPacket(content)
-
-                    let response: Message
-
-                    switch (message.opcode) {
-                        case GatewayOpcode.Identify:
-                            response = new Message(GatewayOpcode.Dispatch, {
-                                v: attributes.v || 6,
-                                user_settings: {},
-                                user: {
-                                    verified: true,
-                                    username: 'Faker',
-                                    // ...
-                                }
-                            }, 'READY', 1)
-                            socket.send(packer.pack(response))
-                            break
-                        case GatewayOpcode.Heartbeat:
-                            response = new Message(GatewayOpcode.HeartbeatAck)
-                            socket.send(packer.pack(response))
-                            break
-                    }
-                } catch (error) {
-                    socket.close(isWebsocketError(error) ? error.code : GatewayCloseEventCode.UnknownError)
-                }
-            })
+            let encodingString = attributes.encoding || 'json'
+            let encoding = encodingString == 'json' ? Encoding.JSON : Encoding.ETF
+            
+            let clientResponder = new ClientResponder(socket, attributes, encoding)
+            clientResponder.attachListener()
+            clientResponder.sendHello()
             
             let id = req.headers['sec-websocket-key'] as string
             this.sockets[id] = socket
