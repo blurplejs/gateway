@@ -3,13 +3,13 @@ import * as chai from 'chai'
 import * as chaiAsPromised from 'chai-as-promised'
 chai.use(chaiAsPromised)
 
-let gateway = null
+let gateway: FakeDiscordGateway | undefined
 
 before(async () => {
     gateway = new FakeDiscordGateway()
-    await gateway.start()
+    gateway.start()
 })
 
 after(async () => {
-    // server.unbindStubs()
+    if (gateway) gateway.stop()
 })

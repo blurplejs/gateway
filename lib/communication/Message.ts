@@ -4,13 +4,11 @@ import { UnknownOpcodeError } from '../errors'
 export default class Message {
 
     constructor (
-        protected opcode: GatewayOpcode | VoiceOpcode,
+        public opcode: GatewayOpcode | VoiceOpcode,
         protected data: object | null = null,
         protected eventName: string | null = null,
         protected sequence: number | null = null
-    ) {
-        console.log(this.opcode)
-    }
+    ) { }
 
     toObject () : object {
         return {

@@ -3,20 +3,16 @@ import { expect } from 'chai'
 
 describe('Bot Authentication', () => {
 
-    it ('should successfully authenticate a bot with a valid token', () => {
+    it ('should successfully authenticate a bot with a valid token', async () => {
         let client = new Client()
 
-        client.on('debug', console.log)
-
-        let token = 'abcdef'
-        expect(client.login(token)).to.eventually.equal(token)
+        let token = 'my-valid-token'
+        let response = await client.login(token)
+        expect(response).to.equal(token)
     })
 
     it ('should not authenticate a bot with an invalid token', () => {
         expect(true).to.be.false
-        //let client = new Client()
-
-        //expect(client.login('abc')).to.eventually.equal('Hello')
     })
 
 })
