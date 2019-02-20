@@ -24,7 +24,8 @@
       "**/*.d.ts"
     ],
     "reporter": [
-      "html"
+      "html",
+      "text"
     ],
     "all": true  
   },
