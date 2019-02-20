@@ -14,7 +14,6 @@ class Storage {
 
     public channels: Channel[] = []
 
-
     /**
      * Seeds the storage with demo data. Any previously seeded data will be discarded
      * 
