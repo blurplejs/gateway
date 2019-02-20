@@ -1,17 +1,17 @@
-import Model from './models/Model'
+import { Model, Proxied } from './models'
 import * as faker from 'faker'
 
-export default class Factory<T> {
+export default class Factory<T, P extends Proxied<T>> {
 
-    constructor (protected Model: new(p?: Partial<T>) => Model<T>, protected number: number) {
+    constructor (protected construct: new(p?: Partial<T>) => P, protected number: number) {
 
     }
     
-    create (each: (fake: typeof faker) => Partial<T> = () => ({})) : Model<T>[] {
+    create (each: (fake: typeof faker) => Partial<T> = () => ({})) : P[] {
         let result = []
 
         for (let i = 0; i < this.number; i++) {
-            result.push(new this.Model(each(faker)))
+            result.push(new this.construct(each(faker)))
         }
         
         return result

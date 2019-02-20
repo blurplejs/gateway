@@ -1,4 +1,3 @@
-import * as faker from 'faker'
 import Snowflake from './Snowflake'
 import Model from './Model'
 
@@ -6,11 +5,6 @@ import Model from './Model'
 type VoiceStateOptions = {
 }
 
-export default class VoiceState extends Model<VoiceStateOptions> {
-
-    fake () : VoiceStateOptions {
-        return {
-        }
-    }
+export default class VoiceState extends Model<VoiceStateOptions>(() => ({})) {
 
 }

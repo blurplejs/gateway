@@ -61,7 +61,7 @@ export default class ClientResponder {
     identify (request: Message) : Message | void {
         if (!request.data.token) throw new AuthenticationFailedError()
         
-        let user = storage.users.find((user) => user.options['@api_token'] == request.data.token)
+        let user = storage.users.find((user) => user['@api_token'] == request.data.token)
         if (!user) throw new AuthenticationFailedError()
 
         let response = new Message(GatewayOpcode.Dispatch, {
@@ -73,7 +73,7 @@ export default class ClientResponder {
             relationships: [],
             user: {
                 verified: true,
-                username: user.options.username,
+                username: user.username,
                 // ...
             }
         }, 'READY', 1)

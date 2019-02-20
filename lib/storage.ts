@@ -1,17 +1,12 @@
 import * as faker from 'faker'
 import Factory from './factory'
-import User from './models/User'
-import Model from './models/Model'
-import Channel from './models/Channel'
-import Guild from './models/Guild'
+import { Proxied, Guild, Channel, User } from './models'
 import Snowflake, { SnowflakeIdentifiable } from './models/Snowflake'
 
 class Storage {
 
     public users: User[] = []
-
     public guilds: Guild[] = []
-
     public channels: Channel[] = []
 
     /**
@@ -34,18 +29,18 @@ class Storage {
         return this
     }
 
-    factory<T> (Model: new() => Model<T>, number: number = 1) : Factory<T> {
+    factory<P, T extends Proxied<P>> (Model: new() => T, number: number = 1) : Factory<P, T> {
         return new Factory(Model, number)
     }
 
-    random (type: 'user' | 'guild' | 'channel') : Model<SnowflakeIdentifiable> {
+    random (type: 'user' | 'guild' | 'channel') : Proxied<SnowflakeIdentifiable> {
         let attribute = {
             user: 'users',
             guild: 'guilds',
             channel: 'channels'
         }[type] as keyof Storage
 
-        return faker.random.arrayElement(this[attribute] as Model<SnowflakeIdentifiable>[])
+        return faker.random.arrayElement(this[attribute] as Proxied<SnowflakeIdentifiable>[])
     }
 
 }

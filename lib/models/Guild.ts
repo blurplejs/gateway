@@ -1,4 +1,3 @@
-import * as faker from 'faker'
 import Snowflake, { SnowflakeIdentifiable } from './Snowflake'
 import Model from './Model'
 import Role from './Role'
@@ -8,7 +7,7 @@ import Channel from './Channel'
 import PresenceUpdate from './PresenceUpdate'
 
 // @see https://discordapp.com/developers/docs/resources/guild#guild-object
-type GuildOptions = SnowflakeIdentifiable & {
+export type GuildOptions = SnowflakeIdentifiable & {
     name: string,
     icon?: string,
     splash?: string,
@@ -41,26 +40,22 @@ type GuildOptions = SnowflakeIdentifiable & {
     presences?: PresenceUpdate[]  
 }
 
-export default class Guild extends Model<GuildOptions> {
-
-    fake() : GuildOptions {
-        return {
-            id: Snowflake.create(),
-            name: faker.internet.domainWord(),
-            owner_id: Snowflake.create(),
-            region: faker.random.locale(),
-            afk_channel_id: undefined,
-            afk_timeout: 900,
-            verification_level: 0,
-            default_message_notifications: 0,
-            explicit_content_filter: 0,
-            roles: [],
-            emojis: [],
-            features: [],
-            mfa_level: 0,
-            application_id: undefined,
-            system_channel_id: undefined
-        }
-    }
+export default class extends Model<GuildOptions>((faker) => ({
+    id: Snowflake.create(),
+    name: faker.internet.domainWord(),
+    owner_id: Snowflake.create(),
+    region: faker.random.locale(),
+    afk_channel_id: undefined,
+    afk_timeout: 900,
+    verification_level: 0,
+    default_message_notifications: 0,
+    explicit_content_filter: 0,
+    roles: [],
+    emojis: [],
+    features: [],
+    mfa_level: 0,
+    application_id: undefined,
+    system_channel_id: undefined
+})) {
     
 }

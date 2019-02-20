@@ -11,12 +11,12 @@ describe('Storage', () => {
 
     it ('should create and return the same users when given the same seed', () => {
         storage.seed(10)
-        let userA = storage.random('user')
+        let firstUser = storage.random('user')
 
         storage.seed(10)
-        let userB = storage.random('user')
+        let secondUser = storage.random('user')
 
-        expect(userA.options.id.toString()).to.equal(userB.options.id.toString())
+        expect(firstUser.id.toString()).to.equal(secondUser.id.toString())
     })
 
 })

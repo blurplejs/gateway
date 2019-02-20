@@ -1,4 +1,3 @@
-import * as faker from 'faker'
 import Snowflake from './Snowflake'
 import Model from './Model'
 
@@ -6,11 +5,6 @@ import Model from './Model'
 type PresenceUpdateOptions = {
 }
 
-export default class PresenceUpdate extends Model<PresenceUpdateOptions> {
-
-    fake () : PresenceUpdateOptions {
-        return {
-        }
-    }
+export default class PresenceUpdate extends Model<PresenceUpdateOptions>(() => ({})) {
 
 }

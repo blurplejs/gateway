@@ -6,11 +6,6 @@ import Model from './Model'
 type EmojiOptions = {
 }
 
-export default class Emoji extends Model<EmojiOptions> {
-
-    fake () : EmojiOptions {
-        return {
-        }
-    }
+export default class Emoji extends Model<EmojiOptions>(() => ({})) {
 
 }

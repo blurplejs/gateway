@@ -1,4 +1,3 @@
-import * as faker from 'faker'
 import Snowflake from './Snowflake'
 import Model from './Model'
 
@@ -6,11 +5,8 @@ import Model from './Model'
 type RoleOptions = {
 }
 
-export default class Role extends Model<RoleOptions> {
+export default class Role extends Model<RoleOptions>(() => ({
 
-    fake () : RoleOptions {
-        return {
-        }
-    }
+})) {
 
 }

@@ -1,11 +1,18 @@
-export default abstract class Model<T> {
+import * as faker from 'faker'
 
-    public options: T
+export type Proxied<T> = Pick<T, keyof T>
 
-    constructor (options?: Partial<T>) {
-        this.options = { ...this.fake(), ...options }
-    }
+export default function Model<T>(defaults: (fake: typeof faker) => T) : new() => Proxied<T> {
+    return class {
+        protected options: T
 
-    abstract fake () : T
-
+        constructor (options: Partial<T>) {
+            this.options = { ...defaults(faker), ...options }
+            return new Proxy(this, {
+                get (target, prop: keyof T) {
+                    return target.options[prop]
+                }
+            })
+        }
+    } as any
 }
