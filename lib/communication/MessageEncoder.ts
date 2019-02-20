@@ -5,8 +5,7 @@ import { DecodeError } from '../errors'
 import Message from './Message'
 
 export enum Encoding {
-    JSON,
-    ETF
+    JSON, ETF
 }
 
 export default class MessageEncoder {

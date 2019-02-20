@@ -15,3 +15,7 @@ export class UnknownOpcodeError extends Error implements WebSocketError {
 export class DecodeError extends Error implements WebSocketError {
     public code = GatewayCloseEventCode.DecodeError
 }
+
+export class AuthenticationFailedError extends Error implements WebSocketError {
+    public code = GatewayCloseEventCode.AuthenticationFailed
+}

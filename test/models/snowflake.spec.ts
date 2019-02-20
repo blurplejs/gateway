@@ -1,5 +1,7 @@
-import { Snowflake } from '../../lib'
+import { Model } from '../../lib'
 import { expect } from 'chai'
+
+const Snowflake = Model.Snowflake
 
 describe('Snowflake', () => {
     

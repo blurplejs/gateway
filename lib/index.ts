@@ -1,3 +1,5 @@
 export { default as FakeDiscordGateway } from './gateway'
 export { default as storage } from './storage'
-export { default as Snowflake } from './models/Snowflake'
+
+import * as Models from './models'
+export { Models as Model }

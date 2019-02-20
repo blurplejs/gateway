@@ -13,7 +13,8 @@ type UserOptions = SnowflakeIdentifiable & {
     verified?: boolean,
     email?: string,
     flags: number,
-    premium_type?: number
+    premium_type?: number,
+    '@api_token'?: string
 }
 
 export default class User extends Fakeable<UserOptions> {

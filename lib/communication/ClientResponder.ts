@@ -2,7 +2,8 @@ import * as WebSocket from 'ws'
 import MessageEncoder, { Encoding } from './MessageEncoder'
 import { GatewayOpcode, GatewayCloseEventCode } from '../constants'
 import Message from './Message'
-import { isWebsocketError } from '../errors'
+import { AuthenticationFailedError, isWebsocketError } from '../errors'
+import storage from '../storage'
 
 export default class ClientResponder {
 
@@ -58,12 +59,21 @@ export default class ClientResponder {
     }
 
     identify (request: Message) : Message | void {
+        if (!request.data.token) throw new AuthenticationFailedError()
+        
+        let user = storage.users.find((user) => user.options['@api_token'] == request.data.token)
+        if (!user) throw new AuthenticationFailedError()
+
         let response = new Message(GatewayOpcode.Dispatch, {
             v: this.clientAttributes.v || 6,
+            _trace: [],
             user_settings: {},
+            guilds: [],
+            private_channels: [],
+            relationships: [],
             user: {
                 verified: true,
-                username: 'Faker',
+                username: user.options.username,
                 // ...
             }
         }, 'READY', 1)
