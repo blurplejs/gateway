@@ -1,6 +1,6 @@
 import * as faker from 'faker'
 import Snowflake, { SnowflakeIdentifiable } from './Snowflake'
-import Fakeable from './Fakeable'
+import Model from './Model'
 import Role from './Role'
 import Emoji from './Emoji'
 import GuildMember from './GuildMember'
@@ -41,7 +41,7 @@ type GuildOptions = SnowflakeIdentifiable & {
     presences?: PresenceUpdate[]  
 }
 
-export default class Guild extends Fakeable<GuildOptions> {
+export default class Guild extends Model<GuildOptions> {
 
     fake() : GuildOptions {
         return {

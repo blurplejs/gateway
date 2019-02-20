@@ -1,12 +1,12 @@
 import * as faker from 'faker'
 import Snowflake from './Snowflake'
-import Fakeable from './Fakeable'
+import Model from './Model'
 
 // @see https://discordapp.com/developers/docs/topics/permissions#role-object
 type RoleOptions = {
 }
 
-export default class Role extends Fakeable<RoleOptions> {
+export default class Role extends Model<RoleOptions> {
 
     fake () : RoleOptions {
         return {

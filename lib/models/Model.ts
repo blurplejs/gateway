@@ -1,4 +1,4 @@
-export default abstract class Fakeable<T> {
+export default abstract class Model<T> {
 
     public options: T
 
@@ -7,5 +7,5 @@ export default abstract class Fakeable<T> {
     }
 
     abstract fake () : T
-    
+
 }

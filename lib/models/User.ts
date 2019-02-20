@@ -1,6 +1,6 @@
 import * as faker from 'faker'
 import Snowflake, { SnowflakeIdentifiable } from './Snowflake'
-import Fakeable from './Fakeable'
+import Fakeable from './Model'
 
 // @see https://discordapp.com/developers/docs/resources/user#user-object
 type UserOptions = SnowflakeIdentifiable & {

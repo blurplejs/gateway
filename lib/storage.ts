@@ -1,7 +1,7 @@
 import * as faker from 'faker'
 import Factory from './factory'
 import User from './models/User'
-import Fakeable from './models/Fakeable'
+import Model from './models/Model'
 import Channel from './models/Channel'
 import Guild from './models/Guild'
 import Snowflake, { SnowflakeIdentifiable } from './models/Snowflake'
@@ -34,18 +34,18 @@ class Storage {
         return this
     }
 
-    factory<T> (fakeable: new() => Fakeable<T>, number: number = 1) : Factory<T> {
-        return new Factory(fakeable, number)
+    factory<T> (Model: new() => Model<T>, number: number = 1) : Factory<T> {
+        return new Factory(Model, number)
     }
 
-    random (type: 'user' | 'guild' | 'channel') : Fakeable<SnowflakeIdentifiable> {
+    random (type: 'user' | 'guild' | 'channel') : Model<SnowflakeIdentifiable> {
         let attribute = {
             user: 'users',
             guild: 'guilds',
             channel: 'channels'
         }[type] as keyof Storage
 
-        return faker.random.arrayElement(this[attribute] as Fakeable<SnowflakeIdentifiable>[])
+        return faker.random.arrayElement(this[attribute] as Model<SnowflakeIdentifiable>[])
     }
 
 }
