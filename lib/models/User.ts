@@ -20,7 +20,7 @@ export default class User extends Fakeable<UserOptions> {
 
     fake () : UserOptions {
         return {
-            id: new Snowflake(),
+            id: Snowflake.create(),
             username: faker.internet.userName(),
             discriminator: faker.random.number({ min: 1000, max: 9999 }).toString(),
             flags: 0

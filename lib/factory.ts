@@ -1,17 +1,18 @@
 import Fakeable from './models/Fakeable'
 
-export default class Factory {
+export default class Factory<T> {
 
-    constructor (protected number: number) {
+    constructor (protected fakeable: new(p?: Partial<T>) => Fakeable<T>, protected number: number) {
 
     }
     
-    create<T> (fakeable: new() => Fakeable<T>) : Fakeable<T>[] {
+    create (each: () => Partial<T> = () => ({})) : Fakeable<T>[] {
         let result = []
         for (let i = 0; i < this.number; i++) {
-            result.push(new fakeable())
+            result.push(new this.fakeable(each()))
         }
         
         return result
     }
+
 }

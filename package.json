@@ -8,9 +8,10 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc --watch",
-    "test": "mocha -r ts-node/register test/**/*.ts"
+    "test": "mocha test/**/*.ts"
   },
   "dependencies": {
+    "big-integer": "^1.6.41",
     "erlpack": "^0.1.2",
     "faker": "^4.1.0",
     "ws": "^6.1.4",

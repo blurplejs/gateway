@@ -1,1 +1,2 @@
 --file ./test/global.ts
+--require ts-node/register
