@@ -2,6 +2,7 @@ import * as faker from 'faker'
 import Snowflake from './Snowflake'
 import Fakeable from './Fakeable'
 
+// @see https://discordapp.com/developers/docs/resources/user#user-object
 type UserOptions = {
     id: Snowflake,
     username: string,
