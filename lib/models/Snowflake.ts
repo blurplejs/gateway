@@ -7,6 +7,10 @@ type SnowflakeParts = {
     increment: number
 }
 
+export type SnowflakeIdentifiable = {
+    id: Snowflake
+}
+
 export default class Snowflake {
     
     constructor (protected snowflake: bigint.BigInteger) { }

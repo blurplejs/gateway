@@ -1,5 +1,5 @@
 import * as faker from 'faker'
-import Snowflake from './Snowflake'
+import Snowflake, { SnowflakeIdentifiable } from './Snowflake'
 import Fakeable from './Fakeable'
 import Role from './Role'
 import Emoji from './Emoji'
@@ -8,8 +8,7 @@ import Channel from './Channel'
 import PresenceUpdate from './PresenceUpdate'
 
 // @see https://discordapp.com/developers/docs/resources/guild#guild-object
-type GuildOptions = {
-    id: Snowflake,
+type GuildOptions = SnowflakeIdentifiable & {
     name: string,
     icon?: string,
     splash?: string,
