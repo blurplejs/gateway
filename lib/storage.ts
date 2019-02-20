@@ -35,7 +35,7 @@ class Storage {
         return this
     }
 
-    factory<T> (fakeable: new() => Fakeable<T>, number: number) : Factory<T> {
+    factory<T> (fakeable: new() => Fakeable<T>, number: number = 1) : Factory<T> {
         return new Factory(fakeable, number)
     }
 
