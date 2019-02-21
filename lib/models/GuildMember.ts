@@ -5,7 +5,7 @@ import Model from './Model'
 type GuildMemberOptions = {
 }
 
-export default class GuildMember extends Model<GuildMemberOptions>(() => ({})) {
+export default class GuildMember extends Model<GuildMemberOptions>('guildMember', () => ({})) {
 
 }
 

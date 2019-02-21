@@ -5,6 +5,6 @@ import Model from './Model'
 type VoiceStateOptions = {
 }
 
-export default class VoiceState extends Model<VoiceStateOptions>(() => ({})) {
+export default class VoiceState extends Model<VoiceStateOptions>('voiceState', () => ({})) {
 
 }

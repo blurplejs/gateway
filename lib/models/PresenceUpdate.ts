@@ -5,6 +5,6 @@ import Model from './Model'
 type PresenceUpdateOptions = {
 }
 
-export default class PresenceUpdate extends Model<PresenceUpdateOptions>(() => ({})) {
+export default class PresenceUpdate extends Model<PresenceUpdateOptions>('presenceUpdate', () => ({})) {
 
 }

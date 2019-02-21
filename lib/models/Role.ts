@@ -5,7 +5,7 @@ import Model from './Model'
 type RoleOptions = {
 }
 
-export default class Role extends Model<RoleOptions>(() => ({
+export default class Role extends Model<RoleOptions>('role', () => ({
 
 })) {
 

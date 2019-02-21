@@ -5,8 +5,11 @@ import Model from './Model'
 export type ChannelOptions = SnowflakeIdentifiable & {
 }
 
-export default class extends Model<ChannelOptions>((faker) => ({
-    id: Snowflake.create()
-})) {
+export default class extends Model<ChannelOptions>(
+    'channel',
+    (faker) => ({
+        id: Snowflake.create()
+    })
+) {
 
 }

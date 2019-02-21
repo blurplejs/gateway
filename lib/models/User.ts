@@ -16,21 +16,16 @@ export type UserOptions = SnowflakeIdentifiable & {
     '@api_token'?: string
 }
 
-/*export default Model<UserOptions>((faker) => ({
-    id: Snowflake.create(),
-    username: faker.internet.userName(),
-    discriminator: faker.random.number({ min: 1000, max: 9999 }).toString(),
-    flags: 0
-}))*/
-
-// For custom functionality:
-export default class User extends Model<UserOptions>((faker) => ({
-    id: Snowflake.create(),
-    username: faker.internet.userName(),
-    discriminator: faker.random.number({ min: 1000, max: 9999 }).toString(),
-    flags: 0
-})) {
-
+export default class User extends Model<UserOptions>(
+    'user',
+    (faker) => ({
+        id: Snowflake.create(),
+        username: faker.internet.userName(),
+        discriminator: faker.random.number({ min: 1000, max: 9999 }).toString(),
+        flags: 0
+    })
+) {
+    
     demo () : string {
         return 'true'
     }

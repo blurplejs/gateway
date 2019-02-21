@@ -6,6 +6,6 @@ import Model from './Model'
 type EmojiOptions = {
 }
 
-export default class Emoji extends Model<EmojiOptions>(() => ({})) {
+export default class Emoji extends Model<EmojiOptions>('emoji', () => ({})) {
 
 }

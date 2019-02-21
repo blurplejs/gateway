@@ -16,6 +16,7 @@ describe('Storage', () => {
         storage.seed(10)
         let secondUser = storage.random('user')
 
+        // @ts-ignore
         expect(firstUser.id.toString()).to.equal(secondUser.id.toString())
     })
 

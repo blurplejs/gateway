@@ -1,13 +1,41 @@
 import * as faker from 'faker'
 import Factory from './factory'
-import { Proxied, Guild, Channel, User } from './models'
+import { Model, Proxied, Guild, Channel, User } from './models'
 import Snowflake, { SnowflakeIdentifiable } from './models/Snowflake'
 
 class Storage {
 
-    public users: User[] = []
-    public guilds: Guild[] = []
-    public channels: Channel[] = []
+    static supportedModels: string[] = [
+        'user',
+        'guild',
+        'channel',
+    ]
+
+    protected store: { [K: string]: Proxied<any>[] } = {}
+
+    get users () : Proxied<User>[] {
+        return this.store['user'] || []
+    }
+
+    set users (users: Proxied<User>[]) {
+        this.store['user'] = users
+    }
+
+    get guilds () : Proxied<Guild>[] {
+        return this.store['guild'] || []
+    }
+
+    set guilds (users: Proxied<Guild>[]) {
+        this.store['guild'] = users
+    }
+
+    get channels () : Proxied<Channel>[] {
+        return this.store['channel'] || []
+    }
+
+    set channels (users: Proxied<Channel>[]) {
+        this.store['channel'] = users
+    }
 
     /**
      * Seeds the storage with demo data. Any previously seeded data will be discarded
@@ -33,14 +61,15 @@ class Storage {
         return new Factory(Model, number)
     }
 
-    random (type: 'user' | 'guild' | 'channel') : Proxied<SnowflakeIdentifiable> {
-        let attribute = {
-            user: 'users',
-            guild: 'guilds',
-            channel: 'channels'
-        }[type] as keyof Storage
+    random (type: string) : Proxied<SnowflakeIdentifiable> | null {
+        if (!Storage.supportedModels.includes(type)) {
+            throw new Error(`${type} not supported.`)
+        }
 
-        return faker.random.arrayElement(this[attribute] as Proxied<SnowflakeIdentifiable>[])
+        let list = this.store[type]
+        if (!list) return null
+        
+        return faker.random.arrayElement(list)
     }
 
 }
