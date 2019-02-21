@@ -38,6 +38,7 @@ export default class ClientResponder {
     }
 
     protected send (message: Message) : void {
+        if (this.socket.readyState !== WebSocket.OPEN) return
         return this.socket.send(MessageEncoder.encode(message, this.encoding))
     }
 
@@ -48,7 +49,7 @@ export default class ClientResponder {
     protected attachStorageListeners () : void {
         storage.on('guildCreated', (guild: Guild) => {
             let message = new Message(GatewayOpcode.Dispatch, guild, 'GUILD_CREATE')
-            // this.send(message)
+            this.send(message)
         })
     }
 
