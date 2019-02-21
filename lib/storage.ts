@@ -2,8 +2,13 @@ import * as faker from 'faker'
 import Factory from './factory'
 import { Model, Proxied, Guild, Channel, User } from './models'
 import Snowflake, { SnowflakeIdentifiable } from './models/Snowflake'
+import { EventEmitter } from 'events'
 
-class Storage {
+interface StorageEvents {
+    on(event: 'guildCreated', listener: (guild: Guild) => void) : this
+}
+
+class Storage extends EventEmitter implements StorageEvents {
 
     static supportedModels: string[] = [
         'user',
@@ -11,30 +16,23 @@ class Storage {
         'channel',
     ]
 
-    protected store: { [K: string]: Proxied<any>[] } = {}
+    protected objects: { [K: string]: Proxied<any>[] } = {}
 
     get users () : Proxied<User>[] {
-        return this.store['user'] || []
-    }
-
-    set users (users: Proxied<User>[]) {
-        this.store['user'] = users
+        return this.objects['user'] || []
     }
 
     get guilds () : Proxied<Guild>[] {
-        return this.store['guild'] || []
-    }
-
-    set guilds (users: Proxied<Guild>[]) {
-        this.store['guild'] = users
+        return this.objects['guild'] || []
     }
 
     get channels () : Proxied<Channel>[] {
-        return this.store['channel'] || []
+        return this.objects['channel'] || []
     }
 
-    set channels (users: Proxied<Channel>[]) {
-        this.store['channel'] = users
+    empty () : this {
+        this.objects = {}
+        return this
     }
 
     /**
@@ -44,21 +42,30 @@ class Storage {
      * @returns this
      */
     seed (seed?: number) : this {
-        if (seed) {
-            faker.seed(seed)
-        }
+        // If seed is not set, set an actual random seed
+        faker.seed(typeof seed == 'number' ? seed : Math.floor(Math.random() * 10000))
 
+        this.empty()
         Snowflake.reset()
 
-        this.users = this.factory(User, 30).create()
-        this.guilds = this.factory(Guild, 20).create()
-        this.channels = this.factory(Channel, 50).create()
+        this.factory(User, 30).create()
+        this.factory(Guild, 20).create()
+        this.factory(Channel, 50).create()
+
+        return this
+    }
+
+    store<T> (model: Proxied<T>) : this {
+        if (!this.objects[model._symbol]) this.objects[model._symbol] = []
+        this.objects[model._symbol].push(model)
+
+        this.emit(`${model._symbol}Created`, model)
 
         return this
     }
 
     factory<T> (Model: new() => T, number: number = 1) : Factory<T> {
-        return new Factory(Model, number)
+        return new Factory(Model, number, this.store.bind(this))
     }
 
     random (type: string) : Proxied<SnowflakeIdentifiable> | null {
@@ -66,7 +73,7 @@ class Storage {
             throw new Error(`${type} not supported.`)
         }
 
-        let list = this.store[type]
+        let list = this.objects[type]
         if (!list) return null
         
         return faker.random.arrayElement(list)

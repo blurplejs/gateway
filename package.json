@@ -9,7 +9,7 @@
     "build": "tsc",
     "watch": "tsc --watch",
     "test": "mocha test/**/*.ts",
-    "coverage:generate": "nyc mocha test/**/*.ts",
+    "coverage": "nyc mocha test/**/*.ts",
     "coverage:report": "nyc report --reporter=text-lcov | coveralls"
   },
   "nyc": {
@@ -27,7 +27,7 @@
       "html",
       "text"
     ],
-    "all": true  
+    "all": true
   },
   "dependencies": {
     "big-integer": "^1.6.41",
@@ -46,6 +46,7 @@
     "@types/ws": "^6.0.1",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
+    "chai-events": "^0.0.3",
     "coveralls": "^3.0.2",
     "discord.js": "^11.4.2",
     "mocha": "^6.0.0",

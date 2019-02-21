@@ -25,9 +25,5 @@ export default class User extends Model<UserOptions>(
         flags: 0
     })
 ) {
-    
-    demo () : string {
-        return 'true'
-    }
 
 }

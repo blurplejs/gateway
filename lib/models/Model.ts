@@ -16,6 +16,8 @@ export default function Model<T>(name: string, defaults: (fake: typeof faker) =>
             this.options = { ...defaults(faker), ...options }
             return new Proxy(this, {
                 get (target, prop: keyof T) {
+                    // @ts-ignore
+                    if (target[prop]) return target[prop]
                     return target.options[prop]
                 }
             })

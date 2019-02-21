@@ -1,9 +1,10 @@
 import { storage } from '../../lib'
 import { expect } from 'chai'
+import { Model } from '../../lib';
 
 describe('Storage', () => {
 
-    it ('should create the a number of users', () => {
+    it ('should create a number of users', () => {
         storage.seed()
 
         expect(storage.users).to.have.length.above(5)
@@ -18,6 +19,19 @@ describe('Storage', () => {
 
         // @ts-ignore
         expect(firstUser.id.toString()).to.equal(secondUser.id.toString())
+    })
+
+    it ('should emit an event when a guild is created', (done) => {
+        storage.empty()
+        expect(storage.guilds).to.be.empty
+
+        storage.on('guildCreated', () => {
+            expect(storage.guilds).to.have.lengthOf(1)
+
+            done()
+        })
+
+        storage.factory(Model.Guild).create()
     })
 
 })
