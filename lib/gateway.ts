@@ -23,7 +23,7 @@ export default class Gateway {
             let encoding = encodingString == 'json' ? Encoding.JSON : Encoding.ETF
             
             let clientResponder = new ClientResponder(socket, attributes, encoding)
-            clientResponder.attachListener()
+            clientResponder.attachListeners()
             clientResponder.sendHello()
             
             let id = req.headers['sec-websocket-key'] as string

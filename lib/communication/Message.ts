@@ -10,7 +10,7 @@ export default class Message {
         public readonly sequence: number | null = null
     ) { }
 
-    toObject () : object {
+    toObject () {
         return {
             op: this.opcode,
             d: this.data,

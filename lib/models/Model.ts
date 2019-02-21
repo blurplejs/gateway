@@ -10,15 +10,15 @@ export default function Model<T>(name: string, defaults: (fake: typeof faker) =>
     return class {
         public _symbol = name
 
-        protected options: T
+        public readonly _options: T
 
         constructor (options: Partial<T>) {
-            this.options = { ...defaults(faker), ...options }
+            this._options = { ...defaults(faker), ...options }
             return new Proxy(this, {
                 get (target, prop: keyof T) {
                     // @ts-ignore
                     if (target[prop]) return target[prop]
-                    return target.options[prop]
+                    return target._options[prop]
                 }
             })
         }

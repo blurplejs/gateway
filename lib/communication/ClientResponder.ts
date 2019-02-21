@@ -17,7 +17,7 @@ export default class ClientResponder {
         return this.socket.send(MessageEncoder.encode(message, this.encoding))
     }
 
-    attachListener () : void {
+    attachListeners () : void {
         this.socket.on('message', async (buffer) => {
             try {
                 let decodedPayload = MessageEncoder.decode(buffer, this.encoding)
@@ -34,6 +34,12 @@ export default class ClientResponder {
                 this.socket.close(isWebsocketError(e) ? e.code : GatewayCloseEventCode.UnknownError)
             }
         })
+
+        this.attachStorageListeners()
+    }
+
+    protected attachStorageListeners () : void {
+        
     }
 
     sendHello () : void {
