@@ -4,7 +4,7 @@ import * as chaiAsPromised from 'chai-as-promised'
 chai.use(chaiAsPromised)
 
 // TODO: Look for the cause why mocha doesn't catch this
-// process.on('uncaughtException', () => process.exit(0))
+process.on('uncaughtException', () => process.exit(0))
 
 let gateway: FakeDiscordGateway
 

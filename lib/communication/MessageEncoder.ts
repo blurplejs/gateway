@@ -32,7 +32,7 @@ export default class MessageEncoder {
         let object = message.toObject()
         object.d = MessageEncoder.replaceSnowflakes(object.d)
 
-        return encoding == Encoding.JSON ? JSON.stringify(object) : erlpack.pack(object)
+        return encoding == Encoding.JSON || true ? JSON.stringify(object) : erlpack.pack(object)
     }
 
     static decode (data: Data, encoding: Encoding = Encoding.JSON) : object {

@@ -1,21 +1,20 @@
 import * as WebSocket from 'ws'
 import MessageEncoder, { Encoding } from './MessageEncoder'
-import { GatewayOpcode, GatewayCloseEventCode } from '../constants'
+import { GatewayOpcode, GatewayCloseEventCode, VoiceOpcode } from '../constants'
 import Message from './Message'
 import { AuthenticationFailedError, isWebsocketError } from '../errors'
 import storage from '../storage'
+import { Guild } from '../models'
 
 export default class ClientResponder {
+
+    protected sequence = 0
 
     constructor (
         protected socket: WebSocket,
         protected clientAttributes: any,
         protected encoding: Encoding = Encoding.JSON
     ) { }
-
-    protected send (message: Message) : void {
-        return this.socket.send(MessageEncoder.encode(message, this.encoding))
-    }
 
     attachListeners () : void {
         this.socket.on('message', async (buffer) => {
@@ -38,12 +37,29 @@ export default class ClientResponder {
         this.attachStorageListeners()
     }
 
+    protected send (message: Message) : void {
+        return this.socket.send(MessageEncoder.encode(message, this.encoding))
+    }
+
+    protected createMessage (opcode: GatewayOpcode | VoiceOpcode, data?: any, eventName?: any) : Message {
+        return new Message(opcode, data, eventName, this.sequence++)
+    }
+
     protected attachStorageListeners () : void {
-        
+        storage.on('guildCreated', (guild: Guild) => {
+            let message = new Message(GatewayOpcode.Dispatch, guild, 'GUILD_CREATE')
+            // this.send(message)
+        })
+    }
+
+    protected queue (delay: number, message: Message) : this {
+        setTimeout(() => this.send(message), delay)
+
+        return this
     }
 
     sendHello () : void {
-        let hello = new Message(GatewayOpcode.Hello, {
+        let hello = this.createMessage(GatewayOpcode.Hello, {
             heartbeat_interval: 45000,
             _trace: ['discord-fake-gateway-01']
         })
@@ -60,21 +76,26 @@ export default class ClientResponder {
         [GatewayOpcode.RequestGuildMembers]: 'requestGuildMembers'
     }
 
-    heartbeat (request: Message) : Message | void {
-        return new Message(GatewayOpcode.HeartbeatAck)
+    heartbeat () {
+        return this.createMessage(GatewayOpcode.HeartbeatAck)
     }
 
-    identify (request: Message) : Message | void {
+    identify (request: Message) {
         if (!request.data.token) throw new AuthenticationFailedError()
         
         let user = storage.users.find((user) => user['@api_token'] == request.data.token)
         if (!user) throw new AuthenticationFailedError()
 
-        let response = new Message(GatewayOpcode.Dispatch, {
+        let guilds = storage.guilds
+        let unavailableGuilds = guilds.map((guild) => ({
+            id: guild.id, unavailable: true
+        }))
+
+        let response = this.createMessage(GatewayOpcode.Dispatch, {
             v: this.clientAttributes.v || 6,
             _trace: [],
             user_settings: {},
-            guilds: [],
+            guilds: unavailableGuilds,
             private_channels: [],
             relationships: [],
             user: {
@@ -82,7 +103,11 @@ export default class ClientResponder {
                 username: user.username,
                 // ...
             }
-        }, 'READY', 1)
+        }, 'READY')
+
+        guilds.forEach((guild) => {
+            this.queue(15, this.createMessage(GatewayOpcode.Dispatch, guild, 'GUILD_CREATE'))
+        })
 
         return response
     }

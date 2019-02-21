@@ -13,7 +13,7 @@ export type SnowflakeIdentifiable = {
 
 export default class Snowflake {
     
-    constructor (protected snowflake: bigint.BigInteger) { }
+    constructor (public snowflake: bigint.BigInteger) { }
 
     protected static discordEpoch = 1420070400000
     
