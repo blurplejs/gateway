@@ -6,7 +6,7 @@ chai.use(chaiAsPromised)
 // TODO: Look for the cause why mocha doesn't catch this
 process.on('uncaughtException', () => process.exit(0))
 
-let gateway: FakeDiscordGateway | undefined
+let gateway: FakeDiscordGateway
 
 before(async () => {
     gateway = new FakeDiscordGateway()
@@ -14,5 +14,5 @@ before(async () => {
 })
 
 after(async () => {
-    if (gateway) gateway.stop()
+    gateway.stop()
 })
