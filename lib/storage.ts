@@ -29,7 +29,7 @@ class Storage {
         return this
     }
 
-    factory<P, T extends Proxied<P>> (Model: new() => T, number: number = 1) : Factory<P, T> {
+    factory<T> (Model: new() => T, number: number = 1) : Factory<T> {
         return new Factory(Model, number)
     }
 

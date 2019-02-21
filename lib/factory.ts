@@ -1,13 +1,19 @@
-import { Model, Proxied } from './models'
 import * as faker from 'faker'
 
-export default class Factory<T, P extends Proxied<T>> {
+/**
+ * Takes all keys in T and returns those that aren't functions
+ */
+type Properties<T> = Pick<T, {
+    [K in keyof T]: T[K] extends (...args: any[]) => any ? never : K
+}[keyof T]>
 
-    constructor (protected construct: new(p?: Partial<T>) => P, protected number: number) {
+export default class Factory<T> {
+
+    constructor (protected construct: new(p?: Partial<Properties<T>>) => T, protected number: number) {
 
     }
     
-    create (each: (fake: typeof faker) => Partial<T> = () => ({})) : P[] {
+    create (each: (fake: typeof faker) => Partial<Properties<T>> = () => ({})) : T[] {
         let result = []
 
         for (let i = 0; i < this.number; i++) {
