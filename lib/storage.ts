@@ -1,22 +1,14 @@
 import * as faker from 'faker'
 import Factory from './factory'
-import { Model, Proxied, Guild, Channel, User } from './models'
+import { Proxied, Guild, Channel, User } from './models'
 import Snowflake, { SnowflakeIdentifiable } from './models/Snowflake'
 import { EventEmitter } from 'events'
+import { AbstractDiscordObject } from './objects/AbstractObject'
 
-interface StorageEvents {
-    on(event: 'guildCreated', listener: (guild: Guild) => void) : this
-}
-
-class Storage extends EventEmitter implements StorageEvents {
-
-    static supportedModels: string[] = [
-        'user',
-        'guild',
-        'channel',
-    ]
+class Storage extends EventEmitter {
 
     protected objects: { [K: string]: Proxied<any>[] } = {}
+    protected objectStorage: { [K: string]: AbstractDiscordObject } = {}
 
     get users () : Proxied<User>[] {
         return this.objects['user'] || []
@@ -69,10 +61,6 @@ class Storage extends EventEmitter implements StorageEvents {
     }
 
     random (type: string) : Proxied<SnowflakeIdentifiable> | null {
-        if (!Storage.supportedModels.includes(type)) {
-            throw new Error(`${type} not supported.`)
-        }
-
         let list = this.objects[type]
         if (!list) return null
         
