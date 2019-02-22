@@ -13,8 +13,6 @@ function fakeChannelData () {
     }
 }
 
-export default class Channel
-    extends createFakeableDiscordObject<Options>('guild', fakeChannelData)
-    implements ResolvableDiscordObject {
+export default class Channel extends createFakeableDiscordObject<Options>('channel', fakeChannelData) {
 
 }

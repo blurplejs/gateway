@@ -4,7 +4,7 @@ import { GatewayOpcode, GatewayCloseEventCode, VoiceOpcode } from '../constants'
 import Message from './Message'
 import { AuthenticationFailedError, isWebsocketError } from '../errors'
 import storage from '../storage'
-import { Guild } from '../models'
+import { Guild } from '../objects'
 
 export default class ClientResponder {
 
@@ -96,7 +96,7 @@ export default class ClientResponder {
             v: this.clientAttributes.v || 6,
             _trace: [],
             user_settings: {},
-            guilds: unavailableGuilds,
+            guilds: [], unavailableGuilds,
             private_channels: [],
             relationships: [],
             user: {
@@ -107,7 +107,7 @@ export default class ClientResponder {
         }, 'READY')
 
         guilds.forEach((guild) => {
-            this.queue(15, this.createMessage(GatewayOpcode.Dispatch, guild, 'GUILD_CREATE'))
+        //    this.queue(15, this.createMessage(GatewayOpcode.Dispatch, guild, 'GUILD_CREATE'))
         })
 
         return response

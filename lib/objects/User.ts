@@ -27,8 +27,6 @@ function fakeUserData () {
     }
 }
 
-export default class User
-    extends createFakeableDiscordObject<Options>('user', fakeUserData)
-    implements ResolvableDiscordObject {
+export default class User extends createFakeableDiscordObject<Options>('user', fakeUserData) {
 
 }

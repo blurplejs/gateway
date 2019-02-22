@@ -57,12 +57,6 @@ function fakeGuildData () {
     }
 }
 
-export default class Guild
-    extends createFakeableDiscordObject<Options>('guild', fakeGuildData)
-    implements ResolvableDiscordObject {
-
-    margin () : string {
-        return '15'
-    }
+export default class Guild extends createFakeableDiscordObject<Options>('guild', fakeGuildData) {
 
 }

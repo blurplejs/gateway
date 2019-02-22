@@ -1,6 +1,6 @@
 import { storage } from '../../lib'
 import { expect } from 'chai'
-import { Model } from '../../lib';
+import { Object } from '../../lib';
 
 describe('Storage', () => {
 
@@ -31,7 +31,7 @@ describe('Storage', () => {
             done()
         })
 
-        storage.factory(Model.Guild).create()
+        storage.factory('guild').create()
     })
 
 })

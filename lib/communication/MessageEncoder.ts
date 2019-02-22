@@ -3,7 +3,7 @@ import * as erlpack from 'erlpack'
 import { Data } from 'ws'
 import { DecodeError } from '../errors'
 import Message from './Message'
-import { Snowflake } from '../models'
+import { Snowflake } from '../objects'
 
 export enum Encoding {
     JSON, ETF

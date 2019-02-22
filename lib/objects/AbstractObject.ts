@@ -1,12 +1,12 @@
 import Snowflake from './Snowflake'
 
-export interface ResolvableDiscordObject {
-    id: Snowflake
-}
-
 export type DiscordObject<OptionType> = Pick<OptionType, keyof OptionType> & {
     forMessage (): OptionType,
     _objectTypeName: string
+}
+
+export type ResolvableDiscordObject<OptionType> = DiscordObject<OptionType> & {
+    id: Snowflake
 }
 
 export abstract class AbstractDiscordObject {

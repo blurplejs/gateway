@@ -1,6 +1,6 @@
 import { Client } from 'discord.js'
 import { expect } from 'chai'
-import { storage, Model } from '../../lib'
+import { storage, Object } from '../../lib'
 
 export default function (validToken: string) {
     return () => {
@@ -10,7 +10,7 @@ export default function (validToken: string) {
             client.login(validToken).then(() => {
                 // Create 3 guilds
                 let numberOfGuilds = 3
-                storage.factory(Model.Guild, numberOfGuilds).create()
+                storage.factory('guild', numberOfGuilds).create()
     
                 // Count how often we receive a guild create event
                 let counted = 0

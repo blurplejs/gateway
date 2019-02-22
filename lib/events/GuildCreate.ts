@@ -1,5 +1,5 @@
 import EventType from './EventType'
-import Guild from '../objects/Guild'
+import { Guild } from '../objects'
 
 export namespace GuildCreate {
 

@@ -1,5 +1,5 @@
 import { Client } from 'discord.js'
-import { storage, Model } from '../../lib'
+import { storage, Object } from '../../lib'
 
 import Login from './login'
 import GuildEvents from './guild-events'
@@ -10,7 +10,7 @@ describe('Discord.js Integration', () => {
 
     beforeEach(() => {
         storage.seed()
-        storage.factory(Model.User).create(() => ({ '@api_token': validToken }))
+        storage.factory('user').create(() => ({ '@api_token': validToken }))
     })
 
     describe('Login', Login(validToken))

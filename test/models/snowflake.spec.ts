@@ -1,7 +1,7 @@
-import { Model } from '../../lib'
+import { Object } from '../../lib'
 import { expect } from 'chai'
 
-const Snowflake = Model.Snowflake
+const Snowflake = Object.Snowflake
 
 describe('Snowflake', () => {
     
