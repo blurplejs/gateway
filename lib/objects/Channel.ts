@@ -1,5 +1,5 @@
 import Snowflake from './Snowflake'
-import { createFakeableDiscordObject, ResolvableDiscordObject } from './AbstractObject'
+import { createFakeableDiscordObject } from './AbstractObject'
 import * as faker from 'faker'
 
 // @see https://discordapp.com/developers/docs/resources/channel#channel-object

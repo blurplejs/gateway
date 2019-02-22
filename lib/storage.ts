@@ -24,6 +24,7 @@ class Storage extends EventEmitter {
 
         objects.forEach((object) => {
             this.objectStorage[object.id.toString()] = object
+            this.emit(`${object._objectTypeName}Created`, object)
         })
     }
 

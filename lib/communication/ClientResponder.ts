@@ -93,8 +93,7 @@ export default class ClientResponder {
             v: this.clientAttributes.v || 6,
             _trace: [],
             user_settings: {},
-            guilds: [],
-            unavailableGuilds: guilds.map((guild) => new UnavailableGuild(guild)),
+            guilds: guilds.map((guild) => new UnavailableGuild(guild)),
             private_channels: [],
             relationships: [],
             user: {
@@ -105,7 +104,7 @@ export default class ClientResponder {
         }, 'READY')
 
         guilds.forEach((guild) => {
-        //    this.queue(15, this.createMessage(GatewayOpcode.Dispatch, guild, 'GUILD_CREATE'))
+            this.queue(15, this.createMessage(GatewayOpcode.Dispatch, guild, 'GUILD_CREATE'))
         })
 
         return response

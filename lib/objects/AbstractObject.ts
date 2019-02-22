@@ -13,7 +13,7 @@ export abstract class AbstractDiscordObject {
     abstract forMessage (): any
 }
 
-export interface DiscordObjectConstructor<T>{
+export interface DiscordObjectConstructor<T> {
     new (options: T): DiscordObject<T>
     prototype: DiscordObject<T>
     objectTypeName: string

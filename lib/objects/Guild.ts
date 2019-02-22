@@ -1,5 +1,10 @@
 import Snowflake from './Snowflake'
-import { createFakeableDiscordObject, ResolvableDiscordObject } from './AbstractObject'
+import Channel from './Channel'
+import Role from './Role'
+import Emoji from './Emoji'
+import GuildMember from './GuildMember'
+import PresenceUpdate from './PresenceUpdate'
+import { createFakeableDiscordObject } from './AbstractObject'
 import * as faker from 'faker'
 
 // @see https://discordapp.com/developers/docs/resources/guild#guild-object
@@ -19,8 +24,8 @@ type Options = {
     verification_level: number,
     default_message_notifications: number,
     explicit_content_filter: number,
-    //roles: Role[],
-    //emojis: Emoji[],
+    roles: Role[],
+    emojis: Emoji[],
     features: string[],
     mfa_level: number,
     application_id: Snowflake | undefined,
@@ -32,9 +37,9 @@ type Options = {
     unavailable?: boolean,
     member_count?: number,
     voice_states?: number[],
-    //members?: GuildMember[],
-    //channels?: Channel[],
-    //presences?: PresenceUpdate[]  
+    members?: GuildMember[],
+    channels?: Channel[],
+    presences?: PresenceUpdate[]  
 }
 
 function fakeGuildData () {

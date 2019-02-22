@@ -1,4 +1,5 @@
 import * as bigint from 'big-integer'
+import { AbstractDiscordObject } from './AbstractObject';
 
 type SnowflakeParts = {
     timestamp: number,
@@ -7,13 +8,11 @@ type SnowflakeParts = {
     increment: number
 }
 
-export type SnowflakeIdentifiable = {
-    id: Snowflake
-}
-
-export default class Snowflake {
+export default class Snowflake extends AbstractDiscordObject {
     
-    constructor (public snowflake: bigint.BigInteger) { }
+    constructor (public snowflake: bigint.BigInteger) {
+        super()
+    }
 
     protected static discordEpoch = 1420070400000
     
@@ -71,6 +70,10 @@ export default class Snowflake {
 
     toBinary () : string {
         return this.snowflake.toString(2).padStart(64, '0')
+    }
+
+    forMessage () {
+        return this.toString()
     }
     
 }
