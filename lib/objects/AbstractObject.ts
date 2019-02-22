@@ -1,20 +1,32 @@
-import { Snowflake } from "../models"
+import Snowflake from './Snowflake'
 
 export interface ResolvableDiscordObject {
     id: Snowflake
+}
+
+export type DiscordObject<OptionType> = Pick<OptionType, keyof OptionType> & {
+    forMessage (): OptionType,
+    _objectTypeName: string
 }
 
 export abstract class AbstractDiscordObject {
     abstract forMessage (): any
 }
 
-export type DiscordObject<T> = Pick<T, keyof T> & {
-    forMessage (): T,
-    _objectTypeName: string
+export interface DiscordObjectConstructor<T>{
+    new (options: T): DiscordObject<T>
+    prototype: DiscordObject<T>
+    objectTypeName: string
 }
 
-export function createDiscordObject<T> (name: string) : new(options: T) => DiscordObject<T> {
+export interface FakeableDiscordObjectConstructor<T> extends DiscordObjectConstructor<T> {
+    new (options?: Partial<T>): DiscordObject<T>
+}
+
+export function createDiscordObject<T> (name: string) : DiscordObjectConstructor<T> {
     return class extends AbstractDiscordObject {
+        static objectTypeName = name
+
         constructor (protected options: T) {
             super()
             return new Proxy(this, {
@@ -31,7 +43,7 @@ export function createDiscordObject<T> (name: string) : new(options: T) => Disco
     } as any
 }
 
-export function createFakeableDiscordObject<T> (name: string, fake: () => T) : new() => DiscordObject<T> {
+export function createFakeableDiscordObject<T> (name: string, fake: () => T) : FakeableDiscordObjectConstructor<T> {
     return class extends createDiscordObject(name) {
         constructor (options: Partial<T>) {
             super({ ...fake(), ...options })

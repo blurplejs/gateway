@@ -72,4 +72,5 @@ export default class Snowflake {
     toBinary () : string {
         return this.snowflake.toString(2).padStart(64, '0')
     }
+    
 }

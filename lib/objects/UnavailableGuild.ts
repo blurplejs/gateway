@@ -1,5 +1,5 @@
 import { createDiscordObject } from './AbstractObject'
-import { Snowflake } from '../models'
+import Snowflake from './Snowflake'
 import Guild from './Guild'
 
 type Options = {

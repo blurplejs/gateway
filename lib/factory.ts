@@ -1,30 +1,20 @@
 import * as faker from 'faker'
-import { Proxied } from './models'
+import { DiscordObject } from './objects/AbstractObject'
 
-/**
- * Takes all keys in T and returns those that aren't functions
- */
-type Properties<T> = Pick<T, {
-    [K in keyof T]: T[K] extends (...args: any[]) => any ? never : K
-}[keyof T]>
+type OptionType<T extends DiscordObject<T>> = T extends DiscordObject<infer U> ? U : never
 
-export default class Factory<T> {
+export default class Factory<T extends DiscordObject<any>> {
 
-    constructor (
-        protected construct: new(p?: Partial<Properties<T>>) => T,
-        protected number: number,
-        protected createdHook?: (created: Proxied<T>) => void
-    ) {
+    constructor (protected construct: new(data: Partial<OptionType<T>>) => T, protected number: number) {
+
     }
-    
-    create (each: (fake: typeof faker) => Partial<Properties<T>> = () => ({})) : T[] {
-        let result = []
 
+    create (each: (fake: typeof faker) => Partial<OptionType<T>> = () => ({})) : T[] {
+        let result = []
         for (let i = 0; i < this.number; i++) {
             let created = new this.construct(each(faker))
 
             result.push(created)
-            if (this.createdHook) this.createdHook(created as any)
         }
         
         return result

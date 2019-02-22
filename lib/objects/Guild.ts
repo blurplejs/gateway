@@ -1,7 +1,8 @@
-import { Snowflake } from '../models'
+import Snowflake from './Snowflake'
 import { createFakeableDiscordObject, ResolvableDiscordObject } from './AbstractObject'
 import * as faker from 'faker'
 
+// @see https://discordapp.com/developers/docs/resources/guild#guild-object
 type Options = {
     id: Snowflake,
     name: string,
@@ -59,5 +60,9 @@ function fakeGuildData () {
 export default class Guild
     extends createFakeableDiscordObject<Options>('guild', fakeGuildData)
     implements ResolvableDiscordObject {
+
+    margin () : string {
+        return '15'
+    }
 
 }

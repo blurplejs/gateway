@@ -1,8 +1,10 @@
-import Snowflake, { SnowflakeIdentifiable } from './Snowflake'
-import Model from './Model'
+import Snowflake from './Snowflake'
+import { createFakeableDiscordObject, ResolvableDiscordObject } from './AbstractObject'
+import * as faker from 'faker'
 
 // @see https://discordapp.com/developers/docs/resources/user#user-object
-export type UserOptions = SnowflakeIdentifiable & {
+type Options = {
+    id: Snowflake,
     username: string,
     discriminator: string,
     avatar?: string,
@@ -16,14 +18,17 @@ export type UserOptions = SnowflakeIdentifiable & {
     '@api_token'?: string
 }
 
-export default class User extends Model<UserOptions>(
-    'user',
-    (faker) => ({
+function fakeUserData () {
+    return {
         id: Snowflake.create(),
         username: faker.internet.userName(),
         discriminator: faker.random.number({ min: 1000, max: 9999 }).toString(),
         flags: 0
-    })
-) {
+    }
+}
+
+export default class User
+    extends createFakeableDiscordObject<Options>('user', fakeUserData)
+    implements ResolvableDiscordObject {
 
 }

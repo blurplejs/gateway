@@ -1,29 +1,16 @@
 import * as faker from 'faker'
 import Factory from './factory'
-import { Proxied, Guild, Channel, User } from './models'
+import { FakeableObjectTypes, User, Guild, Channel } from './objects'
 import Snowflake, { SnowflakeIdentifiable } from './models/Snowflake'
 import { EventEmitter } from 'events'
-import { AbstractDiscordObject } from './objects/AbstractObject'
+import { AbstractDiscordObject, DiscordObject } from './objects/AbstractObject'
 
 class Storage extends EventEmitter {
 
-    protected objects: { [K: string]: Proxied<any>[] } = {}
-    protected objectStorage: { [K: string]: AbstractDiscordObject } = {}
-
-    get users () : Proxied<User>[] {
-        return this.objects['user'] || []
-    }
-
-    get guilds () : Proxied<Guild>[] {
-        return this.objects['guild'] || []
-    }
-
-    get channels () : Proxied<Channel>[] {
-        return this.objects['channel'] || []
-    }
+    protected objectStorage: { [K: string]: DiscordObject<any> } = {}
 
     empty () : this {
-        this.objects = {}
+        this.objectStorage = {}
         return this
     }
 
@@ -40,31 +27,27 @@ class Storage extends EventEmitter {
         this.empty()
         Snowflake.reset()
 
-        this.factory(User, 30).create()
-        this.factory(Guild, 20).create()
-        this.factory(Channel, 50).create()
+        this.factory('user', 30).create()
+        this.factory('guild', 20).create()
+        this.factory('channel', 50).create()
 
         return this
     }
 
-    store<T> (model: Proxied<T>) : this {
-        if (!this.objects[model._symbol]) this.objects[model._symbol] = []
-        this.objects[model._symbol].push(model)
+    factory (string: 'user', number: number) : Factory<User>
+    factory (string: 'guild', number: number) : Factory<Guild>
+    factory (string: 'channel', number: number) : Factory<Channel>
+    factory<T extends DiscordObject<any>> (name: string, number: number = 1) : Factory<T> {
+        if (!FakeableObjectTypes[name]) throw new Error(`${name} is not a fakeable object and cannot instantiate a factory`)
 
-        this.emit(`${model._symbol}Created`, model)
-
-        return this
+        return new Factory(FakeableObjectTypes[name], number)
     }
 
-    factory<T> (Model: new() => T, number: number = 1) : Factory<T> {
-        return new Factory(Model, number, this.store.bind(this))
-    }
+    random (name: string) : DiscordObject<any> | null {
+        let snowflakes = Object.keys(this.objectStorage).filter((snowflake) => this.objectStorage[snowflake]._objectTypeName === name)
+        if (!snowflakes.length) return null
 
-    random (type: string) : Proxied<SnowflakeIdentifiable> | null {
-        let list = this.objects[type]
-        if (!list) return null
-        
-        return faker.random.arrayElement(list)
+        return this.objectStorage[faker.random.arrayElement(snowflakes)]
     }
 
 }
