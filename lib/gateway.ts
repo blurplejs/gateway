@@ -5,7 +5,7 @@ import { Constants } from 'discord.js'
 import { parse } from 'querystring'
 import { GatewayCloseEventCode } from './constants'
 import ClientResponder from './communication/ClientResponder'
-import { Encoding } from './communication/MessageEncoder'
+import { Encoding } from './communication/Encoder'
 
 export default class Gateway {
 

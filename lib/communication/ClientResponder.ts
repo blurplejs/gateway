@@ -1,10 +1,10 @@
 import * as WebSocket from 'ws'
-import MessageEncoder, { Encoding } from './MessageEncoder'
+import { encode, decode, Encoding } from './Encoder'
 import { GatewayOpcode, GatewayCloseEventCode, VoiceOpcode } from '../constants'
 import Message from './Message'
 import { AuthenticationFailedError, isWebsocketError } from '../errors'
 import storage from '../storage'
-import { Guild } from '../objects'
+import { Guild, UnavailableGuild } from '../objects'
 
 export default class ClientResponder {
 
@@ -19,7 +19,7 @@ export default class ClientResponder {
     attachListeners () : void {
         this.socket.on('message', async (buffer) => {
             try {
-                let decodedPayload = MessageEncoder.decode(buffer, this.encoding)
+                let decodedPayload = decode(buffer, this.encoding)
                 let message = Message.fromPacket(decodedPayload)
 
                 let handler = ClientResponder.listenerMap[message.opcode as GatewayOpcode]
@@ -39,7 +39,7 @@ export default class ClientResponder {
 
     protected send (message: Message) : void {
         if (this.socket.readyState !== WebSocket.OPEN) return
-        return this.socket.send(MessageEncoder.encode(message, this.encoding))
+        return this.socket.send(encode(message, this.encoding))
     }
 
     protected createMessage (opcode: GatewayOpcode | VoiceOpcode, data?: any, eventName?: any) : Message {
@@ -88,15 +88,13 @@ export default class ClientResponder {
         if (!user) throw new AuthenticationFailedError()
 
         let guilds = storage.guilds
-        let unavailableGuilds = guilds.map((guild) => ({
-            id: guild.id, unavailable: true
-        }))
 
         let response = this.createMessage(GatewayOpcode.Dispatch, {
             v: this.clientAttributes.v || 6,
             _trace: [],
             user_settings: {},
-            guilds: [], unavailableGuilds,
+            guilds: [],
+            unavailableGuilds: guilds.map((guild) => new UnavailableGuild(guild)),
             private_channels: [],
             relationships: [],
             user: {
