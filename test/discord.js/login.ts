@@ -16,8 +16,9 @@ export default function (validToken: string) {
             let client = new Client()
             await client.login(validToken)
     
+            let randomGuild = storage.random('guild')
             // @ts-ignore
-            let clientGuild = client.guilds.find(g => g.id === storage.random('guild').id.toString())
+            let clientGuild = client.guilds.find(g => g.id === randomGuild.id.toString())
             expect(clientGuild).to.not.be.null
         })
     

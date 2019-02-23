@@ -28,6 +28,13 @@ class Storage extends EventEmitter {
         })
     }
 
+    find (id: Snowflake | string) : DiscordObject<any> | null {
+        if (id instanceof Snowflake) id = id.toString()
+        let object = this.objectStorage[id]
+
+        return object ? object : null
+    }
+
     get users () : User[] {
         return this.objectsOfType('user') as User[]
     }
@@ -62,7 +69,7 @@ class Storage extends EventEmitter {
     factory<T extends DiscordObject<any>> (name: string, number: number = 1) : Factory<T> {
         if (!FakeableObjectTypes[name]) throw new Error(`${name} is not a fakeable object and cannot instantiate a factory`)
 
-        return new Factory(FakeableObjectTypes[name], number, this.insert.bind(this))
+        return new Factory(FakeableObjectTypes[name], number)
     }
 
     random (name: 'user') : User | null

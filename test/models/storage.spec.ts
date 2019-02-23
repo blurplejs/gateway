@@ -22,16 +22,26 @@ describe('Storage', () => {
     })
 
     it ('should emit an event when a guild is created', (done) => {
-        storage.empty()
-        expect(storage.guilds).to.be.empty
-
-        storage.on('guildCreated', () => {
+        let finisher = () => {
             expect(storage.guilds).to.have.lengthOf(1)
 
+            storage.off('guildCreated', finisher)
             done()
-        })
+        }
 
+        storage.on('guildCreated', finisher)
+
+        storage.empty()
+        expect(storage.guilds).to.be.empty
         storage.factory('guild').create()
+    })
+
+    it ('should be able to find children of objects', () => {
+        let guild = storage.factory('guild').create(() => ({ name: 'fuck'}))[0] as Object.Guild
+
+        // @ts-ignore
+        let firstChannel = guild.channels[0]
+        expect(storage.find(firstChannel.id)).to.not.be.null
     })
 
 })

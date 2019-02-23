@@ -14,11 +14,17 @@ export default function (validToken: string) {
     
                 // Count how often we receive a guild create event
                 let counted = 0
-                client.on('guildCreate', () => {
+                let callback = () => {
                     counted++
+
                     // Finish successfully when we received 3 guilds
-                    if (counted == numberOfGuilds) done()
-                })
+                    if (counted == numberOfGuilds) {
+                        done()
+                        client.off('guildCreate', callback)
+                    }
+                }
+
+                client.on('guildCreate', callback)
             })
         })
 

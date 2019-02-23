@@ -6,6 +6,7 @@ import GuildMember from './GuildMember'
 import PresenceUpdate from './PresenceUpdate'
 import { createFakeableDiscordObject } from './AbstractObject'
 import * as faker from 'faker'
+import Factory from '../factory'
 
 // @see https://discordapp.com/developers/docs/resources/guild#guild-object
 type Options = {
@@ -42,9 +43,12 @@ type Options = {
     presences?: PresenceUpdate[]  
 }
 
-function fakeGuildData () {
+function fakeGuildData (options: Partial<Options>) {
+    let id = options.id ? options.id : Snowflake.create()
+    let position = 0
+
     return {
-        id: Snowflake.create(),
+        id,
         name: faker.internet.domainWord(),
         owner_id: Snowflake.create(),
         region: faker.random.locale(),
@@ -53,12 +57,13 @@ function fakeGuildData () {
         verification_level: 0,
         default_message_notifications: 0,
         explicit_content_filter: 0,
-        roles: [],
-        emojis: [],
+        roles: [new Role({ id, name: '@everyone' })].concat(new Factory(Role, faker.random.number(5)).create()),
+        emojis: new Factory(Emoji, faker.random.number(5)).create(),
         features: [],
         mfa_level: 0,
         application_id: undefined,
-        system_channel_id: undefined
+        system_channel_id: undefined,
+        channels: new Factory(Channel, faker.random.number({ min: 1, max: 10 })).create(() => ({ guild_id: id, position: position++ }))
     }
 }
 

@@ -1,5 +1,6 @@
 import * as faker from 'faker'
 import { DiscordObject, ResolvableDiscordObject } from './objects/AbstractObject'
+import storage from './storage'
 
 type OptionType<T extends DiscordObject<T>> = T extends DiscordObject<infer U> ? U : never
 
@@ -13,23 +14,22 @@ export default class Factory<T extends DiscordObject<any>> {
 
     constructor (
         protected construct: new(data: Partial<OptionType<T>>) => T,
-        protected number: number,
-        protected afterHook?: (created: ResolvableDiscordObject<OptionType<T>>[]) => void
+        protected number: number
     ) {
 
     }
 
     create (each: (fake: typeof faker) => Partial<OptionType<T>> = () => ({})) : T[] {
         let result = []
-        let resolvable = false
+        let resolvable = []
         for (let i = 0; i < this.number; i++) {
             let created = new this.construct(each(faker))
-            if (typeof this.resolvable === 'undefined') this.resolvable = isResolvable(created) 
 
+            if (created.id) resolvable.push(created)
             result.push(created)
         }
         
-        if (this.afterHook) this.afterHook(result as ResolvableDiscordObject<any>[])
+        storage.insert(resolvable as ResolvableDiscordObject<any>[])
         return result
     }
 

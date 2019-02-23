@@ -40,7 +40,6 @@ export default class ClientResponder {
 
     protected send (message: Message) : void {
         if (this.socket.readyState !== WebSocket.OPEN) return
-        // console.log(encode(message, this.encoding))
         this.socket.send(encode(message, this.encoding))
     }
 

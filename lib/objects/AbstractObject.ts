@@ -44,10 +44,10 @@ export function createDiscordObject<T> (name: string) : DiscordObjectConstructor
     } as any
 }
 
-export function createFakeableDiscordObject<T> (name: string, fake: () => T) : FakeableDiscordObjectConstructor<T> {
+export function createFakeableDiscordObject<T> (name: string, fake: (options: Partial<T>) => T) : FakeableDiscordObjectConstructor<T> {
     return class extends createDiscordObject(name) {
-        constructor (options: Partial<T>) {
-            super({ ...fake(), ...options })
+        constructor (options: Partial<T> = {}) {
+            super({ ...fake(options), ...options })
         }
     } as any
 }

@@ -1,5 +1,4 @@
-import { Client } from 'discord.js'
-import { storage, Object } from '../../lib'
+import { storage } from '../../lib'
 
 import Login from './login'
 import GuildEvents from './guild-events'
