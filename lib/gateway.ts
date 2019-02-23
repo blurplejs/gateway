@@ -18,11 +18,9 @@ export default class Gateway {
         this.wss = new WebSocket.Server({ port: wsPort })
         this.wss.on('connection', (socket, req) => {
             let attributes = parse((req.url as string).replace(/^\/?\??/, ''))
-
-            let encodingString = attributes.encoding || 'json'
-            let encoding = encodingString == 'json' ? Encoding.JSON : Encoding.ETF
+            let encoding = attributes.encoding === 'etf' ? Encoding.ETF : Encoding.JSON
             
-            let clientResponder = new ClientResponder(socket, attributes, encoding)
+            let clientResponder = new ClientResponder(socket, encoding)
             clientResponder.attachListeners()
             clientResponder.sendHello()
             

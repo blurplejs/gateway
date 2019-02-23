@@ -13,7 +13,6 @@ export default class ClientResponder {
 
     constructor (
         protected socket: WebSocket,
-        protected clientAttributes: any,
         protected encoding: Encoding = Encoding.JSON
     ) { }
 
@@ -91,7 +90,7 @@ export default class ClientResponder {
         let guilds = storage.guilds
 
         let response = this.createMessage(GatewayOpcode.Dispatch, {
-            v: this.clientAttributes.v || 6,
+            v: 6,
             _trace: [],
             user_settings: {},
             guilds: guilds.map((guild) => new UnavailableGuild(guild)),
