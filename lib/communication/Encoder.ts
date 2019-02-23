@@ -12,7 +12,7 @@ function isIterable (obj: any) : boolean {
 
 function encodeDiscordObjects (data: any) : any {
     if (!isIterable(data)) return data
-    if (data instanceof AbstractDiscordObject) return data.forMessage()
+    if (data instanceof AbstractDiscordObject) return encodeDiscordObjects(data.forMessage())
 
     for (let name in data) {
         if (isIterable(data[name])) data[name] = encodeDiscordObjects(data[name])

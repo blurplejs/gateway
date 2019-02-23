@@ -9,6 +9,7 @@ import { Guild, UnavailableGuild } from '../objects'
 export default class ClientResponder {
 
     protected sequence = 0
+    protected messageQueue: Message[] = []
 
     constructor (
         protected socket: WebSocket,
@@ -39,7 +40,8 @@ export default class ClientResponder {
 
     protected send (message: Message) : void {
         if (this.socket.readyState !== WebSocket.OPEN) return
-        return this.socket.send(encode(message, this.encoding))
+        // console.log(encode(message, this.encoding))
+        this.socket.send(encode(message, this.encoding))
     }
 
     protected createMessage (opcode: GatewayOpcode | VoiceOpcode, data?: any, eventName?: any) : Message {

@@ -3,6 +3,7 @@ import Message from '../../lib/communication/Message'
 import { storage } from '../../lib'
 import { GatewayOpcode } from '../../lib/constants'
 import { expect } from 'chai'
+import { AbstractDiscordObject } from '../../lib/objects/AbstractObject'
 
 describe('Message Encoder', () => {
 

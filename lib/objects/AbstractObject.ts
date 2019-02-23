@@ -26,13 +26,14 @@ export interface FakeableDiscordObjectConstructor<T> extends DiscordObjectConstr
 export function createDiscordObject<T> (name: string) : DiscordObjectConstructor<T> {
     return class extends AbstractDiscordObject {
         static objectTypeName = name
+        _objectTypeName = name
 
         constructor (protected options: T) {
             super()
             return new Proxy(this, {
-                get (target, prop: keyof T | '_objectTypeName') {
-                    if (prop === '_objectTypeName') return name
-                    return target.options[prop]
+                get (target, type) {
+                    // @ts-ignore
+                    return type in target ? target[type] : target.options[type]
                 }
             })
         }
