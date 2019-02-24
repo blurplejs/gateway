@@ -1,6 +1,7 @@
 import EventType from './EventType'
 import { Guild } from '../objects'
 
+// @see https://discordapp.com/developers/docs/topics/gateway#guild-create
 export namespace GuildCreate {
 
     export type PayloadType = Guild

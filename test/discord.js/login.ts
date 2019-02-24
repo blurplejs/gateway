@@ -1,6 +1,6 @@
 import { Client } from 'discord.js'
 import { expect } from 'chai'
-import { storage } from '../../lib'
+import { storage, Object } from '../../lib'
 
 export default function (validToken: string) {
     return () => {
@@ -16,8 +16,7 @@ export default function (validToken: string) {
             let client = new Client()
             await client.login(validToken)
     
-            let randomGuild = storage.random('guild')
-            // @ts-ignore
+            let randomGuild = storage.random('guild') as Object.Guild
             let clientGuild = client.guilds.find(g => g.id === randomGuild.id.toString())
             expect(clientGuild).to.not.be.null
         })

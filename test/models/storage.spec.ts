@@ -1,6 +1,5 @@
-import { storage } from '../../lib'
+import { storage, Object } from '../../lib'
 import { expect } from 'chai'
-import { Object } from '../../lib';
 
 describe('Storage', () => {
 
