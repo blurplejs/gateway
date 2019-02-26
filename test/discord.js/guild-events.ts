@@ -1,4 +1,4 @@
-import { Client } from 'discord.js'
+import createClient from './discordClient'
 import { expect } from 'chai'
 import { storage, Object } from '../../lib'
 
@@ -6,7 +6,7 @@ export default function (validToken: string) {
     return () => {
 
         it ('should receive newly created guilds', (done) => {
-            let client = new Client()
+            let client = createClient()
             client.login(validToken).then(() => {
                 // Create 3 guilds
                 let numberOfGuilds = 3
