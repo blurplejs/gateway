@@ -2,20 +2,16 @@ import EventType from './EventType'
 import { Guild } from '../objects'
 
 // @see https://discordapp.com/developers/docs/topics/gateway#guild-create
-export namespace GuildCreate {
+export type PayloadType = Guild
 
-    export type PayloadType = Guild
+export class GuildCreate extends EventType<PayloadType> {
 
-    export class Event extends EventType<PayloadType> {
+    constructor (protected guild: Guild) {
+        super()
+    }
 
-        constructor (protected guild: Guild) {
-            super()
-        }
-
-        get payload () {
-            return this.guild
-        }
-    
+    get payload () {
+        return this.guild
     }
 
 }

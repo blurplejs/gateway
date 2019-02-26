@@ -4,7 +4,7 @@ import { createServer, Server } from 'http'
 import { Constants } from 'discord.js'
 import { parse } from 'querystring'
 import { GatewayCloseEventCode } from './constants'
-import ClientResponder from './communication/ClientResponder'
+import ClientHandler from './communication/ClientHandler'
 import { Encoding } from './communication/Encoder'
 
 export default class Gateway {
@@ -20,9 +20,9 @@ export default class Gateway {
             let attributes = parse((req.url as string).replace(/^\/?\??/, ''))
             let encoding = attributes.encoding === 'etf' ? Encoding.ETF : Encoding.JSON
             
-            let clientResponder = new ClientResponder(socket, encoding)
-            clientResponder.attachListeners()
-            clientResponder.sendHello()
+            let handler = new ClientHandler(socket, encoding)
+            handler.attachListeners()
+            handler.sendHello()
             
             let id = req.headers['sec-websocket-key'] as string
             this.sockets[id] = socket

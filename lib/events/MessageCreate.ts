@@ -1,20 +1,16 @@
 import EventType from './EventType'
 
 // @see https://discordapp.com/developers/docs/topics/gateway#message-create
-export namespace MessageCreate {
+export type PayloadType = {}
 
-    export type PayloadType = {}
+export class MessageCreate extends EventType<PayloadType> {
 
-    export class Event extends EventType<PayloadType> {
+    constructor () {
+        super()
+    }
 
-        constructor () {
-            super()
-        }
-
-        get payload () {
-            return {}
-        }
-    
+    get payload () {
+        return {}
     }
 
 }

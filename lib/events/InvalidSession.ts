@@ -1,20 +1,16 @@
 import EventType from './EventType'
 
 // @see https://discordapp.com/developers/docs/topics/gateway#invalid-session
-export namespace InvalidSession {
+export type PayloadType = boolean
 
-    export type PayloadType = boolean
+export class InvalidSession extends EventType<PayloadType> {
 
-    export class Event extends EventType<PayloadType> {
+    constructor (protected resumable: boolean = true) {
+        super()
+    }
 
-        constructor (protected resumable: boolean = true) {
-            super()
-        }
-
-        get payload () {
-            return this.resumable
-        }
-    
+    get payload () {
+        return this.resumable
     }
 
 }

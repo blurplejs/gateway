@@ -2,20 +2,17 @@ import EventType from './EventType'
 import { Channel } from '../objects'
 
 // @see https://discordapp.com/developers/docs/topics/gateway#channel-create
-export namespace ChannelCreate {
+export type PayloadType = Channel
 
-    export type PayloadType = Channel
+export class ChannelCreate extends EventType<PayloadType> {
 
-    export class Event extends EventType<PayloadType> {
+    constructor (protected channel: Channel) {
+        super()
+    }
 
-        constructor (protected channel: Channel) {
-            super()
-        }
-
-        get payload () {
-            return this.channel
-        }
-    
+    get payload () {
+        return this.channel
     }
 
 }
+

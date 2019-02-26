@@ -1,20 +1,16 @@
 import EventType from './EventType'
 
 // @see https://discordapp.com/developers/docs/topics/gateway#voice-server-update
-export namespace VoiceServerUpdate {
+export type PayloadType = {}
 
-    export type PayloadType = {}
+export class VoiceServerUpdate extends EventType<PayloadType> {
 
-    export class Event extends EventType<PayloadType> {
+    constructor () {
+        super()
+    }
 
-        constructor () {
-            super()
-        }
-
-        get payload () {
-            return {}
-        }
-    
+    get payload () {
+        return {}
     }
 
 }

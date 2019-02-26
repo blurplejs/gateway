@@ -1,20 +1,16 @@
 import EventType from './EventType'
 
 // @see https://discordapp.com/developers/docs/topics/gateway#guild-member-add
-export namespace GuildMemberAdd {
+export type PayloadType = {}
 
-    export type PayloadType = {}
+export class GuildMemberAdd extends EventType<PayloadType> {
 
-    export class Event extends EventType<PayloadType> {
+    constructor () {
+        super()
+    }
 
-        constructor () {
-            super()
-        }
-
-        get payload () {
-            return {}
-        }
-    
+    get payload () {
+        return {}
     }
 
 }

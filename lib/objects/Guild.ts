@@ -8,6 +8,30 @@ import { createFakeableDiscordObject } from './AbstractObject'
 import * as faker from 'faker'
 import Factory from '../factory'
 
+enum DefaultMessageNotificationLevel {
+    ALL_MESSAGES = 0,
+    ONLY_MENTIONS = 1
+}
+
+enum ExplicitContentFilterLevel {
+    DISABLED = 0,
+    MEMBERS_WITHOUT_ROLES = 1,
+    ALL_MEMBERS = 2
+}
+
+enum MFALevel {
+    NONE = 0,
+    ELEVATED = 1
+}
+
+enum VerificationLevel {
+    NONE = 0,
+    LOW = 1,
+    MEDIUM = 2,
+    HIGH = 3,
+    VERY_HIGH = 4
+}
+
 // @see https://discordapp.com/developers/docs/resources/guild#guild-object
 type Options = {
     id: Snowflake,
@@ -68,5 +92,10 @@ function fakeGuildData (options: Partial<Options>) {
 }
 
 export default class Guild extends createFakeableDiscordObject<Options>('guild', fakeGuildData) {
+
+    static MessageNotificationLevel = DefaultMessageNotificationLevel
+    static ExplicitContentFilterLevel = ExplicitContentFilterLevel
+    static MFALevel = MFALevel
+    static VerificationLevel = VerificationLevel
 
 }

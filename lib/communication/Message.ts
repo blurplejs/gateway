@@ -1,5 +1,6 @@
 import { GatewayOpcode, VoiceOpcode } from '../constants'
 import { UnknownOpcodeError } from '../errors'
+import EventType from '../events/EventType'
 
 export default class Message {
 
@@ -19,7 +20,16 @@ export default class Message {
         }
     }
 
-    static fromPacket (packet: any, voice: boolean = false) : Message {
+    static fromEvent (event: EventType<any>, sequence: number | null = null) : Message {
+        return new Message(
+            event.opcode,
+            event.payload,
+            event.opcode === GatewayOpcode.Dispatch ? event.eventName : null,
+            sequence
+        )
+    }
+
+    static fromClientPacket (packet: any, voice: boolean = false) : Message {
         let opcodeName = voice ? GatewayOpcode[packet.op] : VoiceOpcode[packet.op]
         if (!opcodeName) {
             throw new UnknownOpcodeError()
