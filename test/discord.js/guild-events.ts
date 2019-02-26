@@ -20,7 +20,7 @@ export default function (validToken: string) {
                     // Finish successfully when we received 3 guilds
                     if (counted == numberOfGuilds) {
                         done()
-                        client.off('guildCreate', callback)
+                        client.removeListener('guildCreate', callback)
                     }
                 }
 

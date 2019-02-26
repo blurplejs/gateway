@@ -24,7 +24,7 @@ describe('Storage', () => {
         let finisher = () => {
             expect(storage.guilds).to.have.lengthOf(1)
 
-            storage.off('guildCreated', finisher)
+            storage.removeListener('guildCreated', finisher)
             done()
         }
 
