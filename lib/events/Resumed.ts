@@ -3,7 +3,9 @@ import EventType from './EventType'
 // @see https://discordapp.com/developers/docs/topics/gateway#resumed
 export namespace Resumed {
 
-    export type PayloadType = {}
+    export type PayloadType = {
+        _trace: string[]
+    }
 
     export class Event extends EventType<PayloadType> {
 
@@ -12,7 +14,9 @@ export namespace Resumed {
         }
 
         get payload () {
-            return {}
+            return {
+                _trace: ['fake-gateway-1']
+            }
         }
     
     }

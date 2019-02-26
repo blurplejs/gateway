@@ -4,7 +4,7 @@ import Guild from './Guild'
     
 type Options = {
     id: Snowflake,
-    unavailable: boolean
+    unavailable: true
 }
 
 export default class UnavailableGuild extends createDiscordObject<Options>('unavailableGuild') {
