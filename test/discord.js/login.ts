@@ -25,7 +25,7 @@ export default function (validToken: string) {
             let client = createClient()
             let response = client.login('an-invalid-token')
     
-            return expect(response).to.eventually.be.rejectedWith('Incorrect login details were provided.')
+            return expect(response).to.eventually.be.rejectedWith('An invalid token was provided.')
         })
 
     }

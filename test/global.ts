@@ -7,7 +7,7 @@ let gateway: FakeDiscordGateway
 
 before(async () => {
     gateway = new FakeDiscordGateway()
-    gateway.start()
+    await gateway.start()
 })
 
 after(async () => {

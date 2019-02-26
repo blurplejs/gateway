@@ -4,6 +4,7 @@ import { Data } from 'ws'
 import { DecodeError } from '../errors'
 import Message from './Message'
 import { AbstractDiscordObject } from '../objects/AbstractObject'
+import * as zlib from 'zlib'
 
 function isIterable (obj: any) : boolean {
     if (!obj || typeof obj === 'string') return false
@@ -25,15 +26,29 @@ export enum Encoding {
     JSON, ETF
 }
 
-export function encode (message: Message, encoding: Encoding = Encoding.JSON) : Buffer | string {
+export async function encode (message: Message, encoding: Encoding = Encoding.JSON, compression: string | undefined = undefined) : Promise<Buffer | string> {
     let object = message.toObject()
     object.d = encodeDiscordObjects(object.d)
 
-    return encoding == Encoding.JSON || true ? JSON.stringify(object) : erlpack.pack(object)
+    let result = encoding == Encoding.JSON ? JSON.stringify(object) : erlpack.pack(object)
+    if (compression === 'zlib-stream') {
+        let deflated = zlib.deflateSync(result, { finishFlush: zlib.constants.Z_SYNC_FLUSH })
+        result = deflated
+    }
+
+    return result
 }
 
-export function decode (data: Data, encoding: Encoding = Encoding.JSON) : object {
-    if (encoding == Encoding.JSON) return JSON.parse(data.toString())
+export async function decode (data: Data, encoding: Encoding = Encoding.JSON, compression: string | undefined = undefined) : Promise<object> {
+    if (encoding == Encoding.JSON) {
+        zlib.inflateSync(data as Buffer)
+        if (compression === 'zlib-stream') {
+            let inflated = zlib.inflateSync(data as Buffer)
+            data = inflated
+        }
+
+        return JSON.parse(data.toString())
+    }
     
     try {
         let unpacked = erlpack.unpack(data)

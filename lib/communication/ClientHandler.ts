@@ -14,17 +14,21 @@ export default class ClientHandler {
 
     protected sequence = 0
     protected previousEvents: { [k: number]: EventType<any> } = {}
+    protected clientCompression: string | undefined
 
     constructor (
         protected socket: WebSocket,
-        protected encoding: Encoding = Encoding.JSON
+        protected encoding: Encoding = Encoding.JSON,
+        protected serverCompression: string | undefined = undefined
     ) { }
 
     attachListeners () : void {
         this.socket.on('message', async (buffer) => {
             try {
-                let decodedPayload = decode(buffer, this.encoding)
+                let decodedPayload = await decode(buffer, this.encoding, this.serverCompression)
                 let message = Message.fromClientPacket(decodedPayload)
+                
+                // console.log('Received', message)
 
                 let handler = ClientHandler.listenerMap[message.opcode as GatewayOpcode]
                 if (!handler) return
@@ -41,15 +45,16 @@ export default class ClientHandler {
         this.attachStorageListeners()
     }
 
-    protected send (message: Message | EventType<any>) : void {
+    protected async send (message: Message | EventType<any>) {
         if (this.socket.readyState !== WebSocket.OPEN) return
 
         if (message instanceof EventType) {
-            message = Message.fromEvent(message)
+            message = Message.fromEvent(message, this.sequence++)
         }
 
-        //console.log(encode(message, this.encoding))
-        this.socket.send(encode(message, this.encoding))
+        // console.log('Sending', message)
+
+        this.socket.send(await encode(message, this.encoding, this.serverCompression))
     }
 
     protected createMessage (opcode: GatewayOpcode | VoiceOpcode, data?: any, eventName?: any) : Message {
@@ -85,6 +90,9 @@ export default class ClientHandler {
 
     identify (request: Message) {
         if (!request.data.token) throw new AuthenticationFailedError()
+
+        // Does the client send compressed data?
+        this.clientCompression = request.data.compress ? 'zlib-stream' : undefined
         
         // Authenticate the user via a user's pseudo @api_token property
         let user = storage.users.find((user) => user['@api_token'] == request.data.token)
